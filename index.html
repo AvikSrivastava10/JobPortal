@@ -91,6 +91,67 @@
         </div>
     </section>
 
+    <!-- HTML Templates for Job Cards -->
+    <template id="jobCardTemplate">
+        <div class="job-card-header">
+            <h3 class="job-title"></h3>
+            <span class="job-type-badge"></span>
+        </div>
+        <div class="job-card-meta">
+            <span class="job-company"><i class="fa-solid fa-building"></i> <span></span></span>
+            <span class="job-location"><i class="fa-solid fa-location-dot"></i> <span></span></span>
+            <span class="job-salary" style="display: none;"><i class="fa-solid fa-indian-rupee-sign"></i> <span></span></span>
+            <span class="job-experience" style="display: none;"><i class="fa-solid fa-clock"></i> <span></span></span>
+        </div>
+        <div class="job-card-description"></div>
+        <div class="job-card-actions">
+            <button type="button" class="btn-edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+            <button type="button" class="btn-delete"><i class="fa-solid fa-trash-can"></i> Delete</button>
+        </div>
+    </template>
+
+    <!-- HTML Template for Edit Mode Form -->
+    <template id="jobCardEditTemplate">
+        <div class="form-group">
+            <label>Job Title</label>
+            <input type="text" class="edit-input edit-title" required>
+        </div>
+        <div class="form-group">
+            <label>Company Name</label>
+            <input type="text" class="edit-input edit-company" required>
+        </div>
+        <div class="form-group">
+            <label>Location</label>
+            <input type="text" class="edit-input edit-location" required>
+        </div>
+        <div class="form-group">
+            <label>Job Type</label>
+            <select class="edit-select edit-type">
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+                <option value="Internship">Internship</option>
+                <option value="Remote">Remote</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Salary Range</label>
+            <input type="text" class="edit-input edit-salary">
+        </div>
+        <div class="form-group">
+            <label>Experience</label>
+            <input type="text" class="edit-input edit-experience">
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea class="edit-textarea edit-description" rows="3"></textarea>
+        </div>
+        <div class="job-card-actions">
+            <button type="button" class="btn-save"><i class="fa-solid fa-check"></i> Save</button>
+            <button type="button" class="btn-cancel"><i class="fa-solid fa-xmark"></i> Cancel</button>
+        </div>
+    </template>
+
     <footer>
         <p>&copy; 2026 JobPortal. All Rights Reserved.</p>
     </footer>

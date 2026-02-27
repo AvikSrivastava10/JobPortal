@@ -1,6 +1,8 @@
 const jobForm = document.getElementById('job-form');
 const jobCardsContainer = document.getElementById('jobCardsContainer');
 const emptyState = document.getElementById('emptyState');
+const jobCardTemplate = document.getElementById('jobCardTemplate');
+const jobCardEditTemplate = document.getElementById('jobCardEditTemplate');
 
 jobForm.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -25,33 +27,48 @@ jobForm.addEventListener('submit', function (e) {
 function createJobCard(data) {
     const card = document.createElement('div');
     card.className = 'job-card';
-    card.innerHTML = buildCardHTML(data);
+    
+    populateCardDisplay(card, data);
     attachCardEvents(card, data);
+    
     return card;
 }
 
-function buildCardHTML(data) {
-    return `
-        <div class="job-card-header">
-            <h3>${escapeHTML(data.title)}</h3>
-            <span class="job-type-badge">${escapeHTML(data.type)}</span>
-        </div>
-        <div class="job-card-meta">
-            <span><i class="fa-solid fa-building"></i> ${escapeHTML(data.company)}</span>
-            <span><i class="fa-solid fa-location-dot"></i> ${escapeHTML(data.location)}</span>
-            ${data.salary ? `<span><i class="fa-solid fa-indian-rupee-sign"></i> ${escapeHTML(data.salary)}</span>` : ''}
-            ${data.experience ? `<span><i class="fa-solid fa-clock"></i> ${escapeHTML(data.experience)}</span>` : ''}
-        </div>
-        <div class="job-card-description">${escapeHTML(data.description)}</div>
-        <div class="job-card-actions">
-            <button class="btn-edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-            <button class="btn-delete"><i class="fa-solid fa-trash-can"></i> Delete</button>
-        </div>
-    `;
+function populateCardDisplay(card, data) {
+    // Clone the display template
+    const template = jobCardTemplate.content.cloneNode(true);
+
+    // Populate with data (textContent is safe from XSS)
+    template.querySelector('.job-title').textContent = data.title;
+    template.querySelector('.job-type-badge').textContent = data.type;
+    template.querySelector('.job-company span').textContent = data.company;
+    template.querySelector('.job-location span').textContent = data.location;
+    template.querySelector('.job-card-description').textContent = data.description;
+
+    // Handle conditional salary display
+    const salaryEl = template.querySelector('.job-salary');
+    if (data.salary) {
+        salaryEl.style.display = 'inline-flex';
+        salaryEl.querySelector('span').textContent = data.salary;
+    }
+
+    // Handle conditional experience display
+    const experienceEl = template.querySelector('.job-experience');
+    if (data.experience) {
+        experienceEl.style.display = 'inline-flex';
+        experienceEl.querySelector('span').textContent = data.experience;
+    }
+
+    // Clear and append template to card
+    card.innerHTML = '';
+    card.appendChild(template);
 }
 
 function attachCardEvents(card, data) {
-    card.querySelector('.btn-delete').addEventListener('click', function () {
+    const deleteBtn = card.querySelector('.btn-delete');
+    const editBtn = card.querySelector('.btn-edit');
+
+    deleteBtn.addEventListener('click', function () {
         card.classList.add('removing');
         card.addEventListener('animationend', function () {
             card.remove();
@@ -61,82 +78,55 @@ function attachCardEvents(card, data) {
         });
     });
 
-    card.querySelector('.btn-edit').addEventListener('click', function () {
+    editBtn.addEventListener('click', function () {
         enterEditMode(card, data);
     });
 }
 
 function enterEditMode(card, data) {
     card.classList.add('editing');
-    card.innerHTML = `
-        <div class="form-group">
-            <label>Job Title</label>
-            <input type="text" class="edit-input" id="editTitle" value="${escapeAttr(data.title)}">
-        </div>
-        <div class="form-group">
-            <label>Company Name</label>
-            <input type="text" class="edit-input" id="editCompany" value="${escapeAttr(data.company)}">
-        </div>
-        <div class="form-group">
-            <label>Location</label>
-            <input type="text" class="edit-input" id="editLocation" value="${escapeAttr(data.location)}">
-        </div>
-        <div class="form-group">
-            <label>Job Type</label>
-            <select class="edit-select" id="editType">
-                <option value="Full-time" ${data.type === 'Full-time' ? 'selected' : ''}>Full-time</option>
-                <option value="Part-time" ${data.type === 'Part-time' ? 'selected' : ''}>Part-time</option>
-                <option value="Contract" ${data.type === 'Contract' ? 'selected' : ''}>Contract</option>
-                <option value="Internship" ${data.type === 'Internship' ? 'selected' : ''}>Internship</option>
-                <option value="Remote" ${data.type === 'Remote' ? 'selected' : ''}>Remote</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Salary Range</label>
-            <input type="text" class="edit-input" id="editSalary" value="${escapeAttr(data.salary)}">
-        </div>
-        <div class="form-group">
-            <label>Experience</label>
-            <input type="text" class="edit-input" id="editExperience" value="${escapeAttr(data.experience)}">
-        </div>
-        <div class="form-group">
-            <label>Description</label>
-            <textarea class="edit-textarea" id="editDescription" rows="3">${escapeHTML(data.description)}</textarea>
-        </div>
-        <div class="job-card-actions">
-            <button class="btn-save"><i class="fa-solid fa-check"></i> Save</button>
-            <button class="btn-cancel"><i class="fa-solid fa-xmark"></i> Cancel</button>
-        </div>
-    `;
 
-    card.querySelector('.btn-save').addEventListener('click', function () {
+    // Clone the edit template
+    const editTemplate = jobCardEditTemplate.content.cloneNode(true);
+
+    // Populate form fields with current data
+    editTemplate.querySelector('.edit-title').value = data.title;
+    editTemplate.querySelector('.edit-company').value = data.company;
+    editTemplate.querySelector('.edit-location').value = data.location;
+    editTemplate.querySelector('.edit-type').value = data.type;
+    editTemplate.querySelector('.edit-salary').value = data.salary;
+    editTemplate.querySelector('.edit-experience').value = data.experience;
+    editTemplate.querySelector('.edit-description').value = data.description;
+
+    // Clear card and append edit template
+    card.innerHTML = '';
+    card.appendChild(editTemplate);
+
+    // Attach save and cancel handlers
+    const saveBtn = card.querySelector('.btn-save');
+    const cancelBtn = card.querySelector('.btn-cancel');
+
+    saveBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+
         const updatedData = {
-            title: card.querySelector('#editTitle').value.trim() || data.title,
-            company: card.querySelector('#editCompany').value.trim() || data.company,
-            location: card.querySelector('#editLocation').value.trim() || data.location,
-            type: card.querySelector('#editType').value,
-            salary: card.querySelector('#editSalary').value.trim(),
-            experience: card.querySelector('#editExperience').value.trim(),
-            description: card.querySelector('#editDescription').value.trim() || data.description
+            title: card.querySelector('.edit-title').value.trim() || data.title,
+            company: card.querySelector('.edit-company').value.trim() || data.company,
+            location: card.querySelector('.edit-location').value.trim() || data.location,
+            type: card.querySelector('.edit-type').value,
+            salary: card.querySelector('.edit-salary').value.trim(),
+            experience: card.querySelector('.edit-experience').value.trim(),
+            description: card.querySelector('.edit-description').value.trim() || data.description
         };
+
         card.classList.remove('editing');
-        card.innerHTML = buildCardHTML(updatedData);
+        populateCardDisplay(card, updatedData);
         attachCardEvents(card, updatedData);
     });
 
-    card.querySelector('.btn-cancel').addEventListener('click', function () {
+    cancelBtn.addEventListener('click', function () {
         card.classList.remove('editing');
-        card.innerHTML = buildCardHTML(data);
+        populateCardDisplay(card, data);
         attachCardEvents(card, data);
     });
-}
-
-function escapeHTML(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-}
-
-function escapeAttr(str) {
-    return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }

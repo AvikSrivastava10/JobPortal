@@ -1,0 +1,67 @@
+.jobs-page {
+  padding-bottom: 80px;
+}
+
+.jobs-page__hero {
+  background: linear-gradient(135deg, #0f0f1a, #1a1a2e);
+  padding: 80px 20px;
+  text-align: center;
+  border-bottom: 1px solid rgba(108, 99, 255, 0.1);
+}
+
+.jobs-page__title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #fff, #c7d2fe, #00d2ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.jobs-page__subtitle {
+  color: #9ca3af;
+  font-size: 1.125rem;
+  margin-bottom: 40px;
+}
+
+.jobs-page__container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.jobs-page__count {
+  margin-bottom: 24px;
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+.jobs-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.jobs-page__empty {
+  text-align: center;
+  padding: 80px;
+  background: #1a1a2e;
+  border-radius: 20px;
+  border: 1px dashed rgba(108, 99, 255, 0.2);
+}
+
+.jobs-page__empty i {
+  font-size: 3rem;
+  color: #6c63ff;
+  margin-bottom: 20px;
+}
+
+.jobs-page__empty h3 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.jobs-page__empty p {
+  color: #6b7280;
+}

@@ -1,0 +1,31 @@
+.post-job-page {
+  padding-bottom: 80px;
+}
+
+.post-job-page__header {
+  background: linear-gradient(135deg, #0f0f1a, #1a1a2e);
+  padding: 80px 20px;
+  text-align: center;
+  border-bottom: 1px solid rgba(108, 99, 255, 0.1);
+  margin-bottom: 0px;
+}
+
+.post-job-page__header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #fff, #c7d2fe, #00d2ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.post-job-page__header p {
+  color: #9ca3af;
+  font-size: 1.125rem;
+}
+
+.post-job-page__container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
